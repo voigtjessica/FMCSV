@@ -63,6 +63,29 @@ nomes <- c( "ID"
             , "Saldo CDB"                                     
             , "Saldo TOTAL")
 
+obras_esc_creches <- c("Escola de Educação Infantil Tipo B", 
+                       "Projeto 1 Convencional", 
+                       "Projeto 2 Convencional", 
+                       "Escola de Educação Infantil Tipo C", 
+                       "MI - Escola de Educação Infantil Tipo B", 
+                       "Espaço Educativo - 12 Salas", 
+                       "Escola com Projeto elaborado pelo proponente", 
+                       "Espaço Educativo - 02 Salas", 
+                       "Espaço Educativo - 06 Salas", 
+                       "Espaço Educativo - 04 Salas", 
+                       "Espaço Educativo - 01 Sala", 
+                       "Espaço Educativo - 08 Salas", 
+                       "Espaço Educativo - 10 Salas", 
+                       "Escola de Educação Infantil Tipo A", 
+                       "Escola com projeto elaborado pelo concedente", 
+                       "MI - Escola de Educação Infantil Tipo C", 
+                       "Projeto Tipo C - Bloco Estrutural", 
+                       "Projeto Tipo B - Bloco Estrutural",
+                       "Escola Infantil - Tipo B (Projeto Novo)",
+                       "Escola Infantil - Tipo C (Projeto Novo)", 
+                       "Escola 06 Salas com Quadra - Projeto FNDE",
+                       "Escola 04 Salas com Quadra - Projeto FNDE")
+
 fnde_files = list.files()
 fnde_files <- fnde_files[-1]
 
@@ -83,7 +106,21 @@ for(i in 1:length(fnde_files)){
   
   obras <- obras %>%
     clean_names() %>%
-    mutate(data_arquivo = data_arq[i])
+    filter(tipo_do_projeto %in% obras_esc_creches) %>%
+    mutate(data_arquivo = data_arq[i],
+           percentual_de_execucao = as.numeric(percentual_de_execucao),
+           nao_iniciada = ifelse( percentual_de_execucao == 0 & !situacao %in%
+                                    c("Inacabada","Paralisada", "Obra Cancelada", "Concluída" ), 1, 0),
+           paralisada_off = ifelse(situacao %in% c("Inacabada","Paralisada"), 1, 0),
+           paralisada_nao_off = if_else(!is.na(data_de_assinatura_do_contrato) & situacao != "Execução" & nao_iniciada == 0|
+                                          percentual_de_execucao > 0 & situacao != "Execução"  & nao_iniciada == 0|
+                                          !is.na(data_prevista_de_conclusao_da_obra) & nao_iniciada == 0 & 
+                                          situacao %in% c("Licitação", "Em Reformulação","Contratação", 
+                                                          "Planejamento pelo proponente"), 1 , 0),
+           paralisada_nao_off = ifelse(situacao %in% c("Obra Cancelada", "Concluída",
+                                                       "Inacabada","Paralisada"), 0, paralisada_nao_off), #retirando concluidas e canceladas
+           paralisada = ifelse(paralisada_nao_off == 1 | paralisada_off == 1, 1, 0)) %>%
+    select(-c(paralisada_off, paralisada_nao_off))
   
   fnde_list[[i]] <- obras
   
