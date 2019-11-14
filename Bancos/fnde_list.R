@@ -107,7 +107,8 @@ for(i in 1:length(fnde_files)){
   obras <- obras %>%
     clean_names() %>%
     filter(tipo_do_projeto %in% obras_esc_creches) %>%
-    mutate(data_arquivo = data_arq[i],
+    mutate(nome = gsub("QUADRA ", "", nome),            #na hora de gerar os outros arquivos eu coloquei "QUADRA" em todos os nomes
+           data_arquivo = data_arq[i],
            percentual_de_execucao = as.numeric(percentual_de_execucao),
            nao_iniciada = ifelse( percentual_de_execucao == 0 & !situacao %in%
                                     c("Inacabada","Paralisada", "Obra Cancelada", "Concluída" ), 1, 0),
