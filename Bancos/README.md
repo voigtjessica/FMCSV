@@ -33,7 +33,7 @@ Nessa planilha foram inseridas algumas informações adicionais que permitem ver
 | tipo_do_projeto | Projeto arquitetônico da obra |                   
 |tipo_da_obra | Categoria mais geral da obra, assume os seguintes valores "Construção", "Ampliação", "Ampliação/Reforma", "Reforma", "Instalações"|
 | classificacao_da_obra | A qual região a obra atende, assume os valores "Urbana", "Rural", "Indigena" e "Quilombo"|
-|valor_pactuado_pelo_fnde| Valor (corrente) pactuado com o FNDE para essa obra. Percebemos que esse valor às vezes representa o valor para todo o convênio, e não apenas para a obra descrita naquela linha |
+|valor_pactuado_pelo_fnde| Valor (corrente) pactuado com o FNDE. Percebemos que esse valor às vezes representa o valor para todo o convênio, e não apenas para a obra descrita naquela linha |
 |rede_de_ensino_publico| Rede de ensino público para a qual aquela obra vai atender|
 |cnpj| CNPJ do ente executor|
 |inscricao_estadual | Inscrição Estadual do ente executor|
